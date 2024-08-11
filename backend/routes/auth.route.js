@@ -13,6 +13,6 @@ router.post('/student/signup', studentSignup)
 router.post('/student/signin', studentSignin)
 router.post('/sendmail', sendMail)
 router.post('/forgotpassword', schoolForgotPassword)
-router.post('/resetpassword', schoolResetPassword)
+router.post('/resetpassword/:id', schoolResetPassword)
 
 export default router;

@@ -3,6 +3,26 @@ import { Link } from 'react-router-dom';
 
 function Signin() {
     const [formData, setFormData] = React.useState({});
+
+    const handleSubmit = () => {
+        console.log(formData);
+        try {
+            fetch(`http://localhost:8080/api/auth/${formData.auth}/signin`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            }).then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    alert(data.message);
+                })
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     return (
         <div>
             <h1 className='text-center text-5xl'>SIGN IN</h1>
@@ -33,10 +53,10 @@ function Signin() {
 
                         <button type='submit' className='border-2 w-[10vw] hover:scale-110 transition-all duration-300' onClick={() => {
                             if (formData.auth) {
-                                console.log(formData)
+                                handleSubmit();
                             }
                             else {
-                                console.log("Select an option")
+                                alert("Select an option")
                             }
                         }}>Sign In</button>
                         <Link to={'/reset-password'} className='text-blue-600'>Forgot Password?</Link>

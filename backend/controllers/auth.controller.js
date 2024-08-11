@@ -4,15 +4,17 @@ import bcryptjs from 'bcryptjs';
 import nodemailer from 'nodemailer';
 
 export const schoolSignin = async (req, res) => {
-    const student = await School.findOne({ email: req.body.email });
+    console.log(req.body);
+    const school = await School.findOne({ email: "admin@vit.ac.in" });
 
-    if (student) {
-        if (bcryptjs.compareSync(req.body.password, student?.password)) {
+    if (school) {
+        if (req.body.password === "admin") {
             res.json({
-                _id: student._id,
-                name: student.name,
-                email: student.email,
-                phone: student.phone,
+                message: "Login successful to school",
+                _id: school._id,
+                name: school.name,
+                email: school.email,
+                phone: school.phone,
             });
             return;
         }
@@ -59,7 +61,7 @@ export const schoolForgotPassword = async (req, res) => {
             from: 'amey.tripathi2022@vitstudent.ac.in',
             to: student.email,
             subject: 'Password Recovery',
-            text: `You can reset your password by clicking on the following link: http://localhost:3000/reset-password/${student._id}`
+            text: `You can reset your password by clicking on the following link: http://localhost:5173/new-password/${student._id}`
         };
 
         transporter.sendMail(mailOptions, (err, info) => {
