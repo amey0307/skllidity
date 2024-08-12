@@ -1,5 +1,5 @@
 import express from "express";
-import { schoolSignin, schoolSignup, studentSignin, studentSignup, sendMail, schoolResetPassword, schoolForgotPassword } from "../controllers/auth.controller.js";
+import { schoolSignin, schoolSignup, studentSignin, studentSignup, sendMail, schoolResetPassword, schoolForgotPassword, getStudents } from "../controllers/auth.controller.js";
 const router = express.Router();
 
 //demo api
@@ -14,5 +14,6 @@ router.post('/student/signin', studentSignin)
 router.post('/sendmail', sendMail)
 router.post('/forgotpassword', schoolForgotPassword)
 router.post('/resetpassword/:id', schoolResetPassword)
+router.get('/getStudents', getStudents)
 
 export default router;

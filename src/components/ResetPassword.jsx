@@ -1,8 +1,11 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 function ResetPassword() {
     const [email, setEmail] = React.useState('');
     const [loading, setLoading] = React.useState(false);
+    const navigate = useNavigate();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -13,7 +16,14 @@ function ResetPassword() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ email })
-            }).then(alert('Email sent'))
+            })
+            if (response.status === 200) {
+                alert('Email sent to your email address')
+                navigate('/sign-in')
+            }
+            else {
+                alert('Email not found')
+            }
             setLoading(false);
         } catch (e) {
             console.log(e)

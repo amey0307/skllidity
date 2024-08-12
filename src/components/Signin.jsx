@@ -1,27 +1,46 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react'
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { setCurrentUserData } from '../redux/user/userSlice.js';
+import { data } from 'autoprefixer';
 
 function Signin() {
     const [formData, setFormData] = React.useState({});
+    const navigate = useNavigate();
+    const { currentUserData } = useSelector(state => state.user);
+    const dispatch = useDispatch();
 
-    const handleSubmit = () => {
-        console.log(formData);
+    const handleSubmit = async (e) => {
         try {
-            fetch(`http://localhost:8080/api/auth/${formData.auth}/signin`, {
+            const res = await fetch(`http://localhost:8080/api/auth/${formData.auth}/signin`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(formData)
-            }).then(res => res.json())
-                .then(data => {
-                    console.log(data);
-                    alert(data.message);
-                })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                dispatch(setCurrentUserData(data));
+                console.log(data.message);
+            }
+            else {
+                alert(data.message);
+            }
         } catch (e) {
-            console.log(e)
+            alert('Error : ' + data.message);
         }
-    }
+    };
+
+    useEffect(() => {
+        if (currentUserData) {
+            if (currentUserData.role === 'admin') {
+                navigate('/admin-pannel');
+            } else {
+                navigate('/student-pannel');
+            }
+        }
+    }, [currentUserData]);
 
     return (
         <div>
@@ -30,13 +49,13 @@ function Signin() {
                 <div className='flex justify-center items-center gap-4 mt-10'>
                     <div>
                         <input type="radio" name='auth' value={'school'} onClick={() => {
-                            setFormData({ ...formData, auth: 'school' });
+                            setFormData({ ...formData, auth: 'school', role: 'admin' });
                         }} />
                         <label htmlFor="auth" className='ml-2'>School Login</label>
                     </div>
                     <div>
                         <input type="radio" name='auth' value={'student'} onClick={() => {
-                            setFormData({ ...formData, auth: 'student' });
+                            setFormData({ ...formData, auth: 'student', role: 'student' });
                         }} />
                         <label htmlFor="auth" className='ml-2'>Student Login</label>
                     </div>
@@ -51,7 +70,7 @@ function Signin() {
                             setFormData({ ...formData, password: e.target.value })
                         }} />
 
-                        <button type='submit' className='border-2 w-[10vw] hover:scale-110 transition-all duration-300' onClick={() => {
+                        <button type='button' className='border-2 w-[10vw] hover:scale-110 transition-all duration-300' onClick={() => {
                             if (formData.auth) {
                                 handleSubmit();
                             }
@@ -62,9 +81,12 @@ function Signin() {
                         <Link to={'/reset-password'} className='text-blue-600'>Forgot Password?</Link>
                     </form>
 
-                    <div>
-
+                    <div className='flex flex-col justify-center items-center mt-10'>
+                        <h1 className='text-3xl'>School Login</h1>
+                        <h2>email : admin@vit.ac.in</h2>
+                        <h2>password : admin</h2>
                     </div>
+
                 </div>
             </div>
         </div>

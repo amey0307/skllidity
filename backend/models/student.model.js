@@ -6,6 +6,7 @@ const StudentSchema = new mongoose.Schema({
     email: String,
     phone: String,
     password: { type: String, required: true },
+    role: { type: String, default: "student" }
 });
 
 const Student = mongoose.model('Student', StudentSchema);

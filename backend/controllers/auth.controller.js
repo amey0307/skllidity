@@ -3,8 +3,8 @@ import School from '../models/school.model.js';
 import bcryptjs from 'bcryptjs';
 import nodemailer from 'nodemailer';
 
+//admin login
 export const schoolSignin = async (req, res) => {
-    console.log(req.body);
     const school = await School.findOne({ email: "admin@vit.ac.in" });
 
     if (school) {
@@ -15,6 +15,7 @@ export const schoolSignin = async (req, res) => {
                 name: school.name,
                 email: school.email,
                 phone: school.phone,
+                role: school.role
             });
             return;
         }
@@ -24,12 +25,8 @@ export const schoolSignin = async (req, res) => {
     }
 }
 
+//student add in school
 export const schoolSignup = async (req, res) => {
-    //check is email already exists
-    if (School.findOne({ email: null })) {
-        return res.status(400).json({ message: "Email already exists" });
-    }
-
     //generate random password
     const password = Math.random().toString(36).slice(-8);
 
@@ -40,9 +37,38 @@ export const schoolSignup = async (req, res) => {
         password: bcryptjs.hashSync(password, 10),
     })
     student.save();
+
+    const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: 'amey.tripathi2022@vitstudent.ac.in',
+            pass: process.env.EMAIL
+        }
+    });
+
+    const mailOptions = {
+        from: 'amey.tripathi2022@vitstudent.ac.in',
+        to: req.body.email,
+        subject: 'Test mail',
+        text: `Hello ${req.body.name} Your password is: ${password}`
+    };
+
+    transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            console.log('Email sent: ' + info.response);
+            res.status(200).json({ message: "Email sent" });
+        }
+    });
+
     res.json({ message: "Student Signed up successfully", name: student });
 }
 
+//forgot password
 export const schoolForgotPassword = async (req, res) => {
     const student = await School.findOne({ email: req.body.email });
 
@@ -70,6 +96,7 @@ export const schoolForgotPassword = async (req, res) => {
             }
             else {
                 console.log('Email sent: ' + info.response);
+                res.status(200).json({ message: "Email sent" });
             }
         });
     }
@@ -78,6 +105,7 @@ export const schoolForgotPassword = async (req, res) => {
     }
 }
 
+//reset password
 export const schoolResetPassword = async (req, res) => {
     const student = await School.findOne
         ({
@@ -94,16 +122,24 @@ export const schoolResetPassword = async (req, res) => {
     }
 }
 
+//student login
 export const studentSignin = async (req, res) => {
     const student = await School.findOne({ email: req.body.email });
 
     if (student) {
+        let login = student.noOfLogin;
+        login++;
+        student.noOfLogin = login;
+        student.save();
         if (bcryptjs.compareSync(req.body.password, student?.password)) {
             res.json({
+                message: "Login successful to student: " + student.name,
                 _id: student._id,
                 name: student.name,
                 email: student.email,
                 phone: student.phone,
+                role: student.role,
+                noOfLogin: login
             });
             return;
         }
@@ -113,6 +149,7 @@ export const studentSignin = async (req, res) => {
     }
 }
 
+//not used
 export const studentSignup = async (req, res) => {
     if (Student.findOne({ email: req.body.email })) {
         return res.status(400).json({ message: "Email already exists" });
@@ -136,6 +173,7 @@ export const sendMail = async (req, res) => {
     for (let i = 0; i < mail.length; i++) {
         console.log(mail[i].email);
     }
+
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 465,
@@ -166,4 +204,17 @@ export const sendMail = async (req, res) => {
             });
         }, 5000);
     }
+}
+
+export const getStudents = async (req, res) => {
+    const students = await School.find({ role: "student" });
+    //send all the students without password
+    const data = students.map(student => {
+        return {
+            name: student.name,
+            email: student.email,
+            phone: student.phone
+        }
+    })
+    res.status(200).json(data);
 }
