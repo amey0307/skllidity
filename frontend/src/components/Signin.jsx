@@ -82,9 +82,34 @@ function Signin() {
                     </form>
 
                     <div className='flex flex-col justify-center items-center mt-10'>
-                        <h1 className='text-3xl'>School Login</h1>
-                        <h2>email : admin@vit.ac.in</h2>
-                        <h2>password : admin</h2>
+                        <div className='border-dashed border-2 w-fit p-4'>
+                            <h1 className='text-3xl'>School Login</h1>
+                            <h2>email : admin@vit.ac.in</h2>
+                            <h2>password : <span className='blur-sm hover:blur-0 transition-all duration-200 cursor-pointer'>admin</span></h2>
+                            <h3>{' [ hover to show ]'}</h3>
+                        </div>
+                    </div>
+
+                    <hr className='mt-4 border-[1.5px] border-dashed mx-40' />
+
+                    <div className='p-10 font-mono flex flex-col justify-center items-start gap-2 px-[30vw]'>
+                        <h1 className='font-bold'>{' > What does this backend project cover ?'} </h1>
+                        <ul className='px-5' >
+                            <li><h2> œ User Authentication</h2></li>
+                            <li><h2> œ Email Service</h2></li>
+                            <li><h2> œ Admin Pannel</h2></li>
+                            <li><h2> œ Student Pannel</h2></li>
+                            <li><h2> œ Reset Password</h2></li>
+                            <li><h2> œ Change Password</h2></li>
+                            <li><h2> œ Add New Student</h2></li>
+                            <li><h2> œ Delete Student</h2></li>
+                            <li><h2> œ Send Email</h2></li>
+                        </ul>
+
+                        <h1 className='font-bold'>{' > How Does this work ?'} </h1>
+                        <ul className='px-5' >
+                            <li><h2> œ </h2></li>
+                        </ul>
                     </div>
 
                 </div>

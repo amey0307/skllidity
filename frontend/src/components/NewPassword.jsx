@@ -1,10 +1,12 @@
 import React from 'react'
 import { Navigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function NewPassword() {
     const { id } = useParams();
     const [password, setPassword] = React.useState('');
     const [rePassword, setRepassword] = React.useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -23,7 +25,7 @@ function NewPassword() {
             }).then(res => res.json())
                 .then(data => {
                     console.log(data);
-                    // <Navigate to={'/sign-in'} replace={true} />
+                    navigate('/sign-in');
                     alert(data.message);
                 })
         } catch (e) {

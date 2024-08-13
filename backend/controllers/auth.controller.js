@@ -27,6 +27,11 @@ export const schoolSignin = async (req, res) => {
 
 //student add in school
 export const schoolSignup = async (req, res) => {
+    //check if email already exists
+    if (await School.findOne({ email: req.body.email })) {
+        return res.status(400).json({ message: "Email already exists" });
+    }
+
     //generate random password
     const password = Math.random().toString(36).slice(-8);
 
@@ -51,8 +56,8 @@ export const schoolSignup = async (req, res) => {
     const mailOptions = {
         from: 'amey.tripathi2022@vitstudent.ac.in',
         to: req.body.email,
-        subject: 'Test mail',
-        text: `Hello ${req.body.name} Your password is: ${password}`
+        subject: `Login Credentials of ${req.body.name}`,
+        text: `Hello ${req.body.name}. Your email : ${req.body.email} Your password is: ${password}`
     };
 
     transporter.sendMail(mailOptions, (err, info) => {
@@ -128,6 +133,33 @@ export const studentSignin = async (req, res) => {
 
     if (student) {
         let login = student.noOfLogin;
+        if (login === 0) {
+            const transporter = nodemailer.createTransport({
+                host: 'smtp.gmail.com',
+                port: 465,
+                secure: true,
+                auth: {
+                    user: 'amey.tripathi2022@vitstudent.ac.in',
+                    pass: process.env.EMAIL
+                }
+            });
+
+            const mailOptions = {
+                from: 'amey.tripathi2022@vitstudent.ac.in',
+                to: req.body.email,
+                subject: 'Thanks for logging in for first time',
+                text: `You can reset your password by clicking on the following link: http://localhost:5173/new-password/${student._id}`
+            };
+
+            transporter.sendMail(mailOptions, (err, info) => {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
+        }
         login++;
         student.noOfLogin = login;
         student.save();
@@ -206,6 +238,39 @@ export const sendMail = async (req, res) => {
     }
 }
 
+export const sendGreetMail = async (req, res) => {
+    //find email of all the students
+    const student = await School.findOne({ email: req.body.email });
+
+    const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: 'amey.tripathi2022@vitstudent.ac.in',
+            pass: process.env.EMAIL
+        }
+    });
+
+    const mailOptions = {
+        from: 'amey.tripathi2022@vitstudent.ac.in',
+        to: student.email,
+        subject: 'Welcome To VIT',
+        text: `Hello ${student.name} Your account has been created successfully at VIT. Your email and pasword will send to you shortly.`
+    };
+
+    transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+            console.log(err);
+            res.status(400).json({ message: "Error" });
+        }
+        else {
+            console.log('Email sent: ' + info.response);
+            res.status(200).json({ message: "Email sent" });
+        }
+    });
+}
+
 export const getStudents = async (req, res) => {
     const students = await School.find({ role: "student" });
     //send all the students without password
@@ -217,4 +282,16 @@ export const getStudents = async (req, res) => {
         }
     })
     res.status(200).json(data);
+}
+
+//delete user
+export const deleteUser = async (req, res) => {
+    try {
+        await School.deleteOne({
+            email: req.body.email
+        });
+        res.status(200).json({ message: "User deleted" });
+    } catch (e) {
+        res.status(400).json({ message: "Error" });
+    }
 }
