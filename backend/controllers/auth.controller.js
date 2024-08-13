@@ -88,7 +88,7 @@ export const schoolForgotPassword = async (req, res) => {
             from: 'amey.tripathi2022@vitstudent.ac.in',
             to: student.email,
             subject: 'Password Recovery',
-            text: `You can reset your password by clicking on the following link: http://localhost:5173/new-password/${student._id}`
+            text: `You can reset your password by clicking on the following link: https://skllidity.vercel.app/new-password/${student._id}`
         };
 
         transporter.sendMail(mailOptions, (err, info) => {

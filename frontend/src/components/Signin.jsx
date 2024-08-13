@@ -9,9 +9,11 @@ function Signin() {
     const navigate = useNavigate();
     const { currentUserData } = useSelector(state => state.user);
     const dispatch = useDispatch();
+    const [loading, setLoading] = React.useState(false);
 
     //sign in request to the server
     const handleSubmit = async (e) => {
+        setLoading(true);
         try {
             const res = await fetch(`https://skllidity-vercel-api.vercel.app/api/auth/${formData.auth}/signin`, {
                 method: 'POST',
@@ -24,12 +26,15 @@ function Signin() {
             if (res.ok) {
                 dispatch(setCurrentUserData(data));
                 console.log(data.message);
+                setLoading(false);
             }
             else {
                 alert(data.message);
+                setLoading(false);
             }
         } catch (e) {
             alert('Error : ' + data.message);
+            setLoading(false);
         }
     };
 
@@ -79,8 +84,9 @@ function Signin() {
                             else {
                                 alert("Select an option")
                             }
-                        }}>Sign In</button>
+                        }} disabled={loading}>{loading ? 'Loading' : 'Sign In'}</button>
                         <Link to={'/reset-password'} className='text-blue-600'>Forgot Password?</Link>
+                        <span className='text-red-600 text-center'>NOTE : Not working in PRODUCTION because user data not saved in browser <br /><span className='text-green-600 text-center'>But working in localhost</span></span>
                     </form>
 
                     <div className='flex flex-col justify-center items-center mt-10'>
