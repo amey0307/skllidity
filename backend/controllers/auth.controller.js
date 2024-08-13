@@ -32,14 +32,10 @@ export const schoolSignup = async (req, res) => {
         return res.status(400).json({ message: "Email already exists" });
     }
 
-    //generate random password
-    const password = Math.random().toString(36).slice(-8);
-
     const student = new School({
         name: req.body.name,
         email: req.body.email,
         phone: req.body.phone,
-        password: bcryptjs.hashSync(password, 10),
     })
     student.save();
 
@@ -56,8 +52,8 @@ export const schoolSignup = async (req, res) => {
     const mailOptions = {
         from: 'amey.tripathi2022@vitstudent.ac.in',
         to: req.body.email,
-        subject: `Login Credentials of ${req.body.name}`,
-        text: `Hello ${req.body.name}. Your email : ${req.body.email} Your password is: ${password}`
+        subject: `Welcome To VIT ${req.body.name}`,
+        text: `Hello ${req.body.name} Your account has been created successfully at VIT. Your email and pasword will send to you shortly.`
     };
 
     transporter.sendMail(mailOptions, (err, info) => {
@@ -179,23 +175,9 @@ export const studentSignin = async (req, res) => {
             return res.status(400).json({ message: "Invalid email or password" });
         }
     }
-}
-
-//not used
-export const studentSignup = async (req, res) => {
-    if (Student.findOne({ email: req.body.email })) {
-        return res.status(400).json({ message: "Email already exists" });
+    else {
+        return res.status(400).json({ message: "Invalid email or password" });
     }
-
-    const student = new School({
-        name: "Amey Tripathi",
-        email: "palash.ghosh2022@vitstudent.ac.in",
-        phone: "1234567890",
-        password: bcryptjs.hashSync("123456", 10),
-    })
-
-    student.save();
-    res.json({ message: "Student Signed up successfully", name: student });
 }
 
 export const sendMail = async (req, res) => {
@@ -238,9 +220,14 @@ export const sendMail = async (req, res) => {
     }
 }
 
-export const sendGreetMail = async (req, res) => {
-    //find email of all the students
+export const sendCredientials = async (req, res) => {
+    //generate random password
+    const password = Math.random().toString(36).slice(-8);
     const student = await School.findOne({ email: req.body.email });
+
+    //add password to the student
+    student.password = bcryptjs.hashSync(password, 10);
+    student.save();
 
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -254,21 +241,22 @@ export const sendGreetMail = async (req, res) => {
 
     const mailOptions = {
         from: 'amey.tripathi2022@vitstudent.ac.in',
-        to: student.email,
-        subject: 'Welcome To VIT',
-        text: `Hello ${student.name} Your account has been created successfully at VIT. Your email and pasword will send to you shortly.`
+        to: req.body.email,
+        subject: `Login Credentials of ${student.name}`,
+        text: `Hello ${student.name}. Your email : ${req.body.email} Your password is: ${password}`
     };
 
     transporter.sendMail(mailOptions, (err, info) => {
         if (err) {
             console.log(err);
-            res.status(400).json({ message: "Error" });
         }
         else {
             console.log('Email sent: ' + info.response);
             res.status(200).json({ message: "Email sent" });
         }
     });
+
+    res.json({ message: "Student Signed up successfully", name: student });
 }
 
 export const getStudents = async (req, res) => {

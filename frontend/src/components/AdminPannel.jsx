@@ -124,7 +124,7 @@ function AdminPannel() {
                     <tr className="bg-blue-500 text-white">
                         <th className="p-4 border-b-2 border-blue-700">Name</th>
                         <th className="p-4 border-b-2 border-blue-700">Email</th>
-                        <th className="p-4 border-b-2 border-blue-700">Send Email</th>
+                        <th className="p-4 border-b-2 border-blue-700">Send Credientials</th>
                         <th className="p-4 border-b-2 border-blue-700">Manage</th>
                     </tr>
                 </thead>
@@ -135,7 +135,7 @@ function AdminPannel() {
                             <td className="p-4 border-b border-gray-200">{student.email}</td>
                             <td className="p-4 border-b border-gray-200"><button type='button' className='text-blue-500' onClick={() => {
                                 handleMail(student.email)
-                            }} disabled={loading}>{loading ? 'Sending...' : 'Send Email'}</button></td>
+                            }} disabled={loading}>{loading ? 'Sending...' : 'Send Credientials'}</button></td>
                             <td className="p-4 border-b border-gray-200 disabled:cursor-not-allowed"><button type='button' className='text-blue-500' onClick={() => {
                                 handleDelete(student.email);
                             }}>Delete</button></td>

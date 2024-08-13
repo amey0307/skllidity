@@ -10,6 +10,7 @@ function Signin() {
     const { currentUserData } = useSelector(state => state.user);
     const dispatch = useDispatch();
 
+    //sign in request to the server
     const handleSubmit = async (e) => {
         try {
             const res = await fetch(`http://localhost:8080/api/auth/${formData.auth}/signin`, {
@@ -32,6 +33,7 @@ function Signin() {
         }
     };
 
+    //redirect to the respective pannel
     useEffect(() => {
         if (currentUserData) {
             if (currentUserData.role === 'admin') {
@@ -92,24 +94,52 @@ function Signin() {
 
                     <hr className='mt-4 border-[1.5px] border-dashed mx-40' />
 
-                    <div className='p-10 font-mono flex flex-col justify-center items-start gap-2 px-[30vw]'>
-                        <h1 className='font-bold'>{' > What does this backend project cover ?'} </h1>
-                        <ul className='px-5' >
-                            <li><h2> œ User Authentication</h2></li>
-                            <li><h2> œ Email Service</h2></li>
-                            <li><h2> œ Admin Pannel</h2></li>
-                            <li><h2> œ Student Pannel</h2></li>
-                            <li><h2> œ Reset Password</h2></li>
-                            <li><h2> œ Change Password</h2></li>
-                            <li><h2> œ Add New Student</h2></li>
-                            <li><h2> œ Delete Student</h2></li>
-                            <li><h2> œ Send Email</h2></li>
-                        </ul>
+                    <div className='p-10 font-mono flex justify-between items-start gap-10 px-[10vw]'>
+                        <div>
+                            <h1 className='font-bold'>{' > What does this backend project cover?'} </h1>
+                            <ul className='px-5' >
+                                <li><h2> œ User Authentication</h2></li>
+                                <li><h2> œ Email Service</h2></li>
+                                <li><h2> œ Admin Pannel</h2></li>
+                                <li><h2> œ Student Pannel</h2></li>
+                                <li><h2> œ Reset Password</h2></li>
+                                <li><h2> œ Change Password</h2></li>
+                                <li><h2> œ Add New Student</h2></li>
+                                <li><h2> œ Delete Student</h2></li>
+                                <li><h2> œ Send Email</h2></li>
+                            </ul>
+                        </div>
 
-                        <h1 className='font-bold'>{' > How Does this work ?'} </h1>
-                        <ul className='px-5' >
-                            <li><h2> œ </h2></li>
-                        </ul>
+                        <div>
+                            <div>
+                                <h1 className='font-bold'>{' > What Does Admin Can Do?'} </h1>
+                                <ul className='px-5' >
+                                    <li><h2> œ You can add student by loggin in <span className='text-red-600'>"ADMIN PANNEL"</span> using credientials provided above.</h2></li>
+                                    <li><h2> œ A <span className='text-red-600'>"Welcome Email"</span> wil be send to the respective student email address.</h2></li>
+                                    <li><h2> œ Admin can email <span className='text-red-600'>"Login Credientials"</span> by clicking <span className='text-green-600'>"Send Credientials"</span> button with <br /><span className='font-semibold text-yellow-600'>RANDOM PASSWORD</span>.</h2></li>
+                                    <li><h2> œ Admin can remove student from school by <span className='text-red-600'>"Delete"</span> button.</h2></li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h1 className='font-bold mt-4'>{' > What Does A Student Can Do?'} </h1>
+                                <ul className='px-5' >
+                                    <li><h2> œ A student can access their own <span className='text-red-600'>dashboard</span> and view their profile information.</h2></li>
+                                    <li><h2> œ They can <span className='text-red-600'>reset their password</span>.</h2></li>
+                                    <li><h2> œ They can view their profile information.</h2></li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h1 className='font-bold mt-4'>{' > Task Compeleted'} </h1>
+                                <ul className='px-5' >
+                                    <li><h2> œ Student will recieve credientials through mail with a <span className='font-semibold text-yellow-600'>RANDOM PASSWORD</span> generated.</h2></li>
+                                    <li><h2> œ Student will recieve mail with instruction on his <span className='text-red-600'>"First Login"</span></h2></li>
+                                    <li><h2> œ Student can <span className='text-red-600'>reset their password</span>.</h2></li>
+                                    <li><h2> œ "User" as well as "Admin" will be logged out if refresh page (cookie not used for data storage in browser).</h2></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
                 </div>

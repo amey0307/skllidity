@@ -5,7 +5,7 @@ const SchoolSchema = new mongoose.Schema({
     name: String,
     email: String,
     phone: String,
-    password: { type: String, required: true },
+    password: { type: String, required: false },
     role: { type: String, default: "student" },
     noOfLogin: { type: Number, default: 0 }
 }, { timestamps: true });
