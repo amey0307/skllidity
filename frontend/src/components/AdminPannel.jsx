@@ -11,7 +11,7 @@ function AdminPannel() {
     const handleMail = async (email) => {
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:8080/api/auth/greetMail', {
+            const response = await fetch('https://skllidity-vercel-api.vercel.app/api/auth/greetMail', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -35,7 +35,7 @@ function AdminPannel() {
         e.preventDefault();
         console.log(formData);
         try {
-            const response = await fetch('http://localhost:8080/api/auth/school/signup', {
+            const response = await fetch('https://skllidity-vercel-api.vercel.app/api/auth/school/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ function AdminPannel() {
         //update the students list
         const fetchStudents = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/auth/getStudents');
+                const response = await fetch('https://skllidity-vercel-api.vercel.app/api/auth/getStudents');
                 const data = await response.json()
                 console.log(data)
                 if (data) {
@@ -67,7 +67,7 @@ function AdminPannel() {
 
     const handleDelete = async (email) => {
         try {
-            const response = await fetch('http://localhost:8080/api/auth/deleteStudent', {
+            const response = await fetch('https://skllidity-vercel-api.vercel.app/api/auth/deleteStudent', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -84,7 +84,7 @@ function AdminPannel() {
         //update the students list
         const fetchStudents = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/auth/getStudents');
+                const response = await fetch('https://skllidity-vercel-api.vercel.app/api/auth/getStudents');
                 const data = await response.json()
                 console.log(data)
                 if (data) {
@@ -100,7 +100,7 @@ function AdminPannel() {
     useEffect(() => {
         const fetchStudents = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/auth/getStudents');
+                const response = await fetch('https://skllidity-vercel-api.vercel.app/api/auth/getStudents');
                 const data = await response.json()
                 console.log(data)
                 if (data) {

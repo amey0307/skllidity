@@ -16,7 +16,7 @@ function NewPassword() {
         }
 
         try {
-            fetch(`http://localhost:8080/api/auth/resetpassword/${id}`, {
+            fetch(`https://skllidity-vercel-api.vercel.app/api/auth/resetpassword/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

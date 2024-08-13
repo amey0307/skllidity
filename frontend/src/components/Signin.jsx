@@ -13,7 +13,7 @@ function Signin() {
     //sign in request to the server
     const handleSubmit = async (e) => {
         try {
-            const res = await fetch(`http://localhost:8080/api/auth/${formData.auth}/signin`, {
+            const res = await fetch(`https://skllidity-vercel-api.vercel.app/api/auth/${formData.auth}/signin`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

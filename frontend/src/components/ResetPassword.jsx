@@ -10,7 +10,7 @@ function ResetPassword() {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:8080/api/auth/forgotpassword', {
+            const response = await fetch('https://skllidity-vercel-api.vercel.app/api/auth/forgotpassword', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
